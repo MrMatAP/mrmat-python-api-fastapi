@@ -20,26 +20,27 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-from pydantic import BaseModel
+from sqlalchemy import ForeignKey, Column, Integer, String, UniqueConstraint, BigInteger
+from sqlalchemy.orm import relationship
+
+from src.mrmat_python_api_fastapi import Base
 
 
-class OwnerInputSchema(BaseModel):
-    name: str
+class Owner(Base):
+    __tablename__ = 'owners'
+    __schema__ = 'mrmat-python-api-fastapi'
+    id = Column(BigInteger().with_variant(Integer, 'sqlite'), primary_key=True)
+    client_id = Column(String(255), nullable=False, unique=True)
+    name = Column(String(255), nullable=False)
+    resources = relationship('Resource', back_populates='owner')
 
 
-class OwnerSchema(OwnerInputSchema):
-    id: int
+class Resource(Base):
+    __tablename__ = 'resources'
+    __schema__ = 'mrmat-python-api-fastapi'
+    id = Column(BigInteger().with_variant(Integer, 'sqlite'), primary_key=True)
+    owner_id = Column(Integer, ForeignKey('owners.id'), nullable=False)
+    name = Column(String(255), nullable=False)
 
-    class Config:
-        orm_mode = True
-
-
-class ResourceInputSchema(BaseModel):
-    name: str
-
-
-class ResourceSchema(ResourceInputSchema):
-    name: str
-
-    class Config:
-        orm_mode = True
+    owner = relationship('Owner', back_populates='resources')
+    UniqueConstraint('owner_id', 'name', name='no_duplicate_names_per_owner')

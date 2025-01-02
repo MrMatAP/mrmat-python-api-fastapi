@@ -20,27 +20,21 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-from sqlalchemy import ForeignKey, Column, Integer, String, UniqueConstraint, BigInteger
-from sqlalchemy.orm import relationship, Session
+from fastapi import FastAPI
 
-from mrmat_python_api_fastapi import Base
+from mrmat_python_api_fastapi import app_config
+from mrmat_python_api_fastapi.apis.healthz import api_healthz
+from mrmat_python_api_fastapi.apis.greeting import api_greeting_v1, api_greeting_v2, api_greeting_v3
+from mrmat_python_api_fastapi.apis.resource import api_resource_v1
+
+app = FastAPI(title='MrMat :: Python :: API :: FastAPI')
+app.include_router(api_healthz, prefix='/healthz', tags=['health'])
+app.include_router(api_greeting_v1, prefix='/api/greeting/v1', tags=['greeting'])
+app.include_router(api_greeting_v2, prefix='/api/greeting/v2', tags=['greeting'])
+app.include_router(api_greeting_v3, prefix='/api/greeting/v3', tags=['greeting'])
+app.include_router(api_resource_v1, prefix='/api/resource/v1', tags=['resource'])
 
 
-class Owner(Base):
-    __tablename__ = 'owners'
-    __schema__ = 'mrmat-python-api-fastapi'
-    id = Column(BigInteger().with_variant(Integer, 'sqlite'), primary_key=True)
-    client_id = Column(String(255), nullable=False, unique=True)
-    name = Column(String(255), nullable=False)
-    resources = relationship('Resource', back_populates='owner')
-
-
-class Resource(Base):
-    __tablename__ = 'resources'
-    __schema__ = 'mrmat-python-api-fastapi'
-    id = Column(BigInteger().with_variant(Integer, 'sqlite'), primary_key=True)
-    owner_id = Column(Integer, ForeignKey('owners.id'), nullable=False)
-    name = Column(String(255), nullable=False)
-
-    owner = relationship('Owner', back_populates='resources')
-    UniqueConstraint('owner_id', 'name', name='no_duplicate_names_per_owner')
+@app.get('/')
+def index():
+    return {'Hello': f'World (Using db {app_config.db_url}'}

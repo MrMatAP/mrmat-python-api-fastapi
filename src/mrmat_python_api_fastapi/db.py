@@ -20,25 +20,18 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-from fastapi import FastAPI
+from functools import lru_cache
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
 
-from mrmat_python_api_fastapi import (
-    app_config,
-    api_healthz,
-    api_greeting_v1,
-    api_greeting_v2,
-    api_greeting_v3,
-    api_resource_v1
-)
-
-app = FastAPI(title='MrMat :: Python :: API :: FastAPI')
-app.include_router(api_healthz, prefix='/healthz', tags=['health'])
-app.include_router(api_greeting_v1, prefix='/api/greeting/v1', tags=['greeting'])
-app.include_router(api_greeting_v2, prefix='/api/greeting/v2', tags=['greeting'])
-app.include_router(api_greeting_v3, prefix='/api/greeting/v3', tags=['greeting'])
-app.include_router(api_resource_v1, prefix='/api/resource/v1', tags=['resource'])
+from src.mrmat_python_api_fastapi import app_config
 
 
-@app.get('/')
-def index():
-    return {'Hello': f'World (Using db {app_config.db_url}'}
+@lru_cache
+def get_db() -> Session:
+    if app_config.db_url.startswith('sqlite'):
+        engine = create_engine(url=app_config.db_url, connect_args={'check_same_thread': False})
+    else:
+        engine = create_engine(url=app_config.db_url)
+    session_local = sessionmaker(bind=engine)
+    return session_local()

@@ -1,12 +1,13 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="run" type="Python.FastAPI">
-    <option name="file" value="C:\Users\imfeldma\Projects\mrmat-python-api-fastapi\mrmat_python_api_fastapi\app.py" />
+    <option name="file" value="$PROJECT_DIR$/src/mrmat_python_api_fastapi/app.py" />
     <module name="mrmat-python-api-fastapi" />
+    <option name="ENV_FILES" value="" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
-    <option name="SDK_HOME" value="C:\Users\imfeldma\var\venv\mrmat-python-api-fastapi\Scripts\python.exe" />
+    <option name="SDK_HOME" value="" />
     <option name="WORKING_DIRECTORY" value="" />
-    <option name="IS_MODULE_SDK" value="false" />
+    <option name="IS_MODULE_SDK" value="true" />
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />

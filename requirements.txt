@@ -1,24 +1,6 @@
 #
-# IMPORTANT: The requirements that actually count are in setup.cfg. This file is here for convenience so you can
-#            quickly install both build- and test-requirements from within your development environment. DO MAKE
-#            SURE to update setup.cfg whenever you make changes here.
-
-# Build/Test requirements
-
-build~=0.7.0             # MIT
-wheel~=0.37.1            # MIT
-pylint~=2.12.2           # GPL-2.0-or-later
-pytest~=7.0.1            # MIT
-pytest-cov~=3.0.0        # MIT
-pyjwt~=2.3.0             # MIT
-python-keycloak~=0.27.0  # MIT
-
 # Runtime requirements
 
-uvicorn~=0.17.6          # BSD
-fastapi~=0.75.0          # MIT
-fastapi_utils=~0.2.1     # MIT
-pydantic~=1.9.0          # MIT
-sqlalchemy~=1.4.36       # MIT
-alembic~=1.7.7           # MIT
-psycopg2-binary~=2.9.3   # LGPL with exceptions
+fastapi==0.115.6            # MIT
+sqlalchemy[asyncio]         # MIT
+uvicorn==0.34.0             # BSD 3-Clause
