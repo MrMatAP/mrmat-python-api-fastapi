@@ -20,7 +20,6 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-from typing import Optional
 import os
 import json
 import secrets
@@ -34,11 +33,11 @@ class Config:
     db_url: str = 'sqlite://'
 
     @staticmethod
-    def from_json_file(file: Optional[os.PathLike] = os.getenv('APP_CONFIG')):
+    def from_json_file(file: str | None = os.getenv('APP_CONFIG')):
         runtime_config = Config()
         if file and os.path.exists(file):
             with open(file, 'r', encoding='UTF-8') as c:
                 file_config = json.load(c)
-            runtime_config.secret_key = file_config.get('secret_key', secrets.token_urlsafe(16))
-            runtime_config.db_url = file_config.get('db_url', 'sqlite://')
+            runtime_config.secret_key = file_config.get_owner('secret_key', secrets.token_urlsafe(16))
+            runtime_config.db_url = file_config.get_owner('db_url', 'sqlite://')
         return runtime_config

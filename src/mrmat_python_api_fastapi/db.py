@@ -24,7 +24,7 @@ from functools import lru_cache
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from src.mrmat_python_api_fastapi import app_config
+from mrmat_python_api_fastapi import app_config
 
 
 @lru_cache

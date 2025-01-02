@@ -23,7 +23,7 @@
 from sqlalchemy import ForeignKey, Column, Integer, String, UniqueConstraint, BigInteger
 from sqlalchemy.orm import relationship
 
-from src.mrmat_python_api_fastapi import Base
+from mrmat_python_api_fastapi import Base
 
 
 class Owner(Base):

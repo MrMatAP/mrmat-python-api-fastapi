@@ -38,7 +38,7 @@ router = APIRouter()
             summary='List all known resources',
             description='Returns all currently known resources and their metadata',
             response_model=List[ResourceSchema])
-async def get_all(db: Session = Depends(get_db)):
+async def get_resources(db: Session = Depends(get_db)):
     return db.query(Resource).all()
 
 
@@ -47,7 +47,7 @@ async def get_all(db: Session = Depends(get_db)):
             summary='Get a single resource',
             description='Return a single resource identified by its resource id',
             response_model=Union[ResourceSchema, StatusSchema])
-async def get(identity: int, db: Session = Depends(get_db)):
+async def get_resource(identity: int, db: Session = Depends(get_db)):
     resource = db.query(Resource).get(identity).one_or_none()
     if not resource:
         return JSONResponse(status_code=404,
@@ -60,7 +60,7 @@ async def get(identity: int, db: Session = Depends(get_db)):
              summary='Create a resource',
              description='Create a resource owned by the authenticated user',
              response_model=Union[ResourceSchema, StatusSchema])
-async def create(data: ResourceInputSchema, db: Session = Depends(get_db)):
+async def create_resource(data: ResourceInputSchema, db: Session = Depends(get_db)):
     resource = Resource(name=data.name)
     db.add(resource)
     db.commit()
@@ -72,7 +72,7 @@ async def create(data: ResourceInputSchema, db: Session = Depends(get_db)):
             summary='Modify a resource',
             description='Modify a resource by its resource id',
             response_model=Union[ResourceSchema, StatusSchema])
-async def modify(identity: int, data: ResourceInputSchema, db: Session = Depends(get_db)):
+async def modify_resource(identity: int, data: ResourceInputSchema, db: Session = Depends(get_db)):
     resource = db.query(Resource).get(identity)
     if not resource:
         return JSONResponse(status_code=404,
@@ -92,7 +92,7 @@ async def modify(identity: int, data: ResourceInputSchema, db: Session = Depends
                    status.HTTP_204_NO_CONTENT: {'description': 'The resource was removed'},
                    status.HTTP_410_GONE: {'description': 'The resource was already gone'}
                })
-async def remove(identity: int, response: Response, db: Session = Depends(get_db)):
+async def remove_resource(identity: int, response: Response, db: Session = Depends(get_db)):
     resource = db.query(Resource).get(identity)
     if not resource:
         return JSONResponse(status_code=204,
@@ -109,7 +109,7 @@ async def remove(identity: int, response: Response, db: Session = Depends(get_db
             summary='List all known owners',
             description='Returns all currently known owners and their metadata',
             response_model=List[OwnerSchema])
-async def get_all(db: Session = Depends(get_db)):
+async def get_owners(db: Session = Depends(get_db)):
     return db.query(Owner).all()
 
 
@@ -118,7 +118,7 @@ async def get_all(db: Session = Depends(get_db)):
             summary='Get a single owner',
             description='Return a single owner identified by its owner id',
             response_model=Union[OwnerSchema, StatusSchema])
-async def get(identity: int, db: Session = Depends(get_db)):
+async def get_owner(identity: int, db: Session = Depends(get_db)):
     owner = db.query(Owner).get(identity)
     if not owner:
         return JSONResponse(status_code=404,
@@ -131,7 +131,7 @@ async def get(identity: int, db: Session = Depends(get_db)):
              summary='Create a owner',
              description='Create a owner',
              response_model=Union[OwnerSchema, StatusSchema])
-async def create(data: OwnerInputSchema, db: Session = Depends(get_db)):
+async def create_owner(data: OwnerInputSchema, db: Session = Depends(get_db)):
     owner = Owner(name=data.name, client_id='TODO')
     db.add(owner)
     db.commit()
@@ -143,7 +143,7 @@ async def create(data: OwnerInputSchema, db: Session = Depends(get_db)):
             summary='Modify a owner',
             description='Modify a owner by its owner id',
             response_model=Union[OwnerSchema, StatusSchema])
-async def modify(identity: int, data: ResourceInputSchema, db: Session = Depends(get_db)):
+async def modify_owner(identity: int, data: ResourceInputSchema, db: Session = Depends(get_db)):
     owner = db.query(Owner).get(identity)
     if not owner:
         return JSONResponse(status_code=404,
@@ -163,7 +163,7 @@ async def modify(identity: int, data: ResourceInputSchema, db: Session = Depends
                    status.HTTP_204_NO_CONTENT: {'description': 'The owner was removed'},
                    status.HTTP_410_GONE: {'description': 'The owner was already gone'}
                })
-async def remove(identity: int, response: Response, db: Session = Depends(get_db)):
+async def remove_owner(identity: int, response: Response, db: Session = Depends(get_db)):
     owner = db.query(Owner).get(identity)
     if not owner:
         response.status_code = status.HTTP_410_GONE
