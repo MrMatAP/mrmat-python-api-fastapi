@@ -40,7 +40,7 @@ namespaces = true
 "*" = [".mo", "*.yml", "*.yaml", "*.md", "inventory", "*.j2", "*.html", "*.ico", "*.css", "*.js", "*.svg", "*.woff", "*.eot", "*.ttf"]
 
 [project.scripts]
-mrmat_python_api_fastapi = "mrmat_python_api_fastapi.cli:run"
+mrmat-python-api-fastapi = "mrmat_python_api_fastapi.app:run"
 
 [tool.mypy]
 plugins = [ 'pydantic.mypy' ]

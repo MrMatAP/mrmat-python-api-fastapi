@@ -25,13 +25,36 @@ Blueprint for the Healthz API
 """
 
 from fastapi import APIRouter
+from pydantic import BaseModel
 
 router = APIRouter()
 
+class HealthzSchema(BaseModel):
+    status: str
+
+class LivenessSchema(BaseModel):
+    status: str
+
+class ReadinessSchema(BaseModel):
+    status: str
 
 @router.get('/',
-            name='Assess application health',
-            description='Get an indication of application health')
-async def get():
-    return {'code': 200, 'message': 'OK'}, 200
+            name='Get application health',
+            description='Get an indication of application health',
+            response_model=HealthzSchema)
+async def healthz() -> HealthzSchema:
+    return HealthzSchema(status='OK')
 
+@router.get('/liveness/',
+            name='Get application liveness',
+            description='Get an indication of application liveness',
+            response_model=LivenessSchema)
+async def liveness() -> LivenessSchema:
+    return LivenessSchema(status='OK')
+
+@router.get('/readiness/',
+            name='Get application readiness',
+            description='Get an indication of application readiness',
+            response_model=ReadinessSchema)
+async def readiness() -> ReadinessSchema:
+    return ReadinessSchema(status='OK')

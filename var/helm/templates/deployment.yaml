@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mrmat-python-api-fastapi
+  labels:
+    app.kubernetes.io/name: mrmat-python-api-fastapi
+    app.kubernetes.io/part-of: mrmat-python-api-fastapi
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: {{ .Values.pod.name }}
+      version: {{ .Chart.AppVersion }}
+  template:
+    metadata:
+      labels:
+        sidecar.istio.io/inject: "true"
+        app: {{ .Values.pod.name }}
+        version: {{ .Chart.AppVersion }}
+        app.kubernetes.io/name: mrmat-python-api-fastapi
+        app.kubernetes.io/part-of: mrmat-python-api-fastapi
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      containers:
+        - name: mrmat-python-api-fastapi
+          image: {{ .Values.pod.repository }}:{{ .Chart.AppVersion }}
+          imagePullPolicy: {{ .Values.pod.imagePullPolicy }}
+          ports:
+          - name: http
+            containerPort: {{ .Values.pod.port }}
+            protocol: TCP
+          securityContext:
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+          livenessProbe:
+            httpGet:
+              path: /api/healthz/liveness/
+              port: {{ .Values.pod.port }}
+          readinessProbe:
+            httpGet:
+              path: /api/healthz/readiness/
+              port: {{ .Values.pod.port }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - {{ .Values.pod.name }}

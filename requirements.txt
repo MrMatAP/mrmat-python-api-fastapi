@@ -4,3 +4,4 @@
 fastapi==0.115.6            # MIT
 sqlalchemy[asyncio]         # MIT
 uvicorn==0.34.0             # BSD 3-Clause
+pydantic==2.10.4            # MIT
