@@ -25,7 +25,7 @@ from functools import lru_cache
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from mrmat_python_api_fastapi import app_config, Base
+from mrmat_python_api_fastapi import app_config, ORMBase
 
 
 @lru_cache
@@ -34,6 +34,6 @@ def get_db() -> Session:
         engine = create_engine(url=app_config.db_url, connect_args={'check_same_thread': False})
     else:
         engine = create_engine(url=app_config.db_url)
-    session_local = sessionmaker(bind=engine)
-    Base.metadata.create_all(bind=engine)
+    session_local = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    ORMBase.metadata.create_all(bind=engine)
     return session_local()

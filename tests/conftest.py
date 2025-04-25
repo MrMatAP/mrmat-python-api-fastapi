@@ -24,7 +24,7 @@ import pathlib
 import pytest
 import fastapi.testclient
 
-from mrmat_python_api_fastapi import app_config, Base
+from mrmat_python_api_fastapi import app_config, ORMBase
 from mrmat_python_api_fastapi.app import app
 from mrmat_python_api_fastapi.db import get_db
 
@@ -46,5 +46,5 @@ def client(test_db_path) -> fastapi.testclient.TestClient:
     app_config.db_url = f'sqlite:///{test_db_path}'
     session = get_db()
     with session.begin():
-        Base.metadata.create_all(session.bind)
+        ORMBase.metadata.create_all(session.bind)
     return fastapi.testclient.TestClient(app)

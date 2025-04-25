@@ -20,9 +20,8 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-from typing import Union
 from fastapi import APIRouter, Depends, status, HTTPException
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import Response
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -49,7 +48,10 @@ router = APIRouter()
 async def get_resources(session: Session = Depends(get_db)) -> ResourceListSchema:
     try:
         resources = session.query(Resource).all()
-        return ResourceListSchema(resources=resources)
+        return ResourceListSchema(resources=[ResourceSchema(uid=r.uid,
+                                                            name=r.name,
+                                                            owner_uid=r.owner_uid)
+                                             for r in resources])
     except SQLAlchemyError as e:
         # Handle the error appropriately, maybe raise an HTTPException
         raise HTTPException(status_code=500, detail="A database error occurred") from e
@@ -86,12 +88,7 @@ async def get_resource(uid: str,
              name='create_resource',
              summary='Create a resource',
              description='Create a resource owned by the authenticated user',
-             responses={
-                 status.HTTP_201_CREATED: {
-                     'description': 'The resource was created',
-                     'model': ResourceSchema
-                 },
-             })
+             response_model=ResourceSchema)
 async def create_resource(data: ResourceInputSchema,
                           response: Response,
                           session: Session = Depends(get_db)):
@@ -100,9 +97,7 @@ async def create_resource(data: ResourceInputSchema,
         session.add(resource)
         session.commit()
         response.status_code = 201
-        return ResourceSchema(uid=resource.uid,
-                              owner_uid=resource.owner_uid,
-                              name=resource.name)
+        return resource
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail="A database error occurred") from e
 
@@ -120,7 +115,8 @@ async def create_resource(data: ResourceInputSchema,
                     'description': 'The resource was not found',
                     'model': StatusSchema
                 }
-            })
+            },
+            response_model=ResourceSchema)
 async def modify_resource(uid: str,
                           data: ResourceInputSchema,
                           response: Response,
@@ -133,9 +129,7 @@ async def modify_resource(uid: str,
         resource.name = data.name
         session.add(resource)
         session.commit()
-        return ResourceSchema(uid=resource.uid,
-                              owner_uid=resource.owner_uid,
-                              name=resource.name)
+        return resource
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail="A database error occurred") from e
 
@@ -176,10 +170,10 @@ async def remove_resource(uid: str,
             summary='List all known owners',
             description='Returns all currently known owners and their metadata',
             response_model=OwnerListSchema)
-async def get_owners(db: Session = Depends(get_db)):
+async def get_owners(session: Session = Depends(get_db)):
     try:
-        owners = db.query(Owner).all()
-        return OwnerListSchema(owners=owners)
+        owners = session.query(Owner).all()
+        return OwnerListSchema(owners=[OwnerSchema(uid=o.uid, name=o.name) for o in owners])
     except SQLAlchemyError as e:
         # Handle the error appropriately, maybe raise an HTTPException
         raise HTTPException(status_code=500, detail="A database error occurred") from e
@@ -196,9 +190,10 @@ async def get_owners(db: Session = Depends(get_db)):
                 },
                 status.HTTP_200_OK: {
                     'description': 'The requested owner',
-                    'model': ResourceSchema
+                    'model': OwnerSchema
                 }
-            })
+            },
+            response_model=OwnerSchema)
 async def get_owner(uid: str,
                     response: Response,
                     session: Session = Depends(get_db)):
@@ -216,9 +211,7 @@ async def get_owner(uid: str,
              name='create_owner',
              summary='Create a owner',
              description='Create a owner',
-             responses={
-                 status.HTTP_201_CREATED: {'description': 'The owner was created', 'model': OwnerSchema}
-             })
+             response_model=OwnerSchema)
 async def create_owner(data: OwnerInputSchema,
                        response: Response,
                        session: Session = Depends(get_db)):
@@ -227,7 +220,7 @@ async def create_owner(data: OwnerInputSchema,
         session.add(owner)
         session.commit()
         response.status_code = 201
-        return OwnerSchema(uid=owner.uid, name=owner.name)
+        return owner
     except SQLAlchemyError as e:
         # Handle the error appropriately, maybe raise an HTTPException
         raise HTTPException(status_code=500, detail="A database error occurred") from e
@@ -246,7 +239,8 @@ async def create_owner(data: OwnerInputSchema,
                     'description': 'The owner was not found',
                     'model': StatusSchema
                 }
-            })
+            },
+            response_model=OwnerSchema)
 async def modify_owner(uid: str,
                        data: OwnerInputSchema,
                        response: Response,
@@ -259,7 +253,7 @@ async def modify_owner(uid: str,
         owner.name = data.name
         session.add(owner)
         session.commit()
-        return OwnerSchema(uid=owner.uid, name=owner.name)
+        return owner
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail="A database error occurred") from e
 

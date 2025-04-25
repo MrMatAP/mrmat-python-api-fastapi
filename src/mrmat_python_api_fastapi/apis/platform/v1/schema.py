@@ -22,25 +22,24 @@
 
 import typing
 
-from mrmat_python_api_fastapi import BaseSchema
+from mrmat_python_api_fastapi import SchemaBase
 
 
-class OwnerInputSchema(BaseSchema):
+class OwnerInputSchema(SchemaBase):
     name: str
 
 class OwnerSchema(OwnerInputSchema):
     uid: str
 
-class OwnerListSchema(BaseSchema):
-    owners: typing.List[OwnerSchema]
+class OwnerListSchema(SchemaBase):
+    owners: typing.Sequence[OwnerSchema]
 
-class ResourceInputSchema(BaseSchema):
+class ResourceInputSchema(SchemaBase):
     name: str
     owner_uid: str
 
 class ResourceSchema(ResourceInputSchema):
     uid: str
-    name: str
 
-class ResourceListSchema(BaseSchema):
-    resources: typing.List[ResourceSchema]
+class ResourceListSchema(SchemaBase):
+    resources: typing.Sequence[ResourceSchema]

@@ -21,28 +21,28 @@
 #  SOFTWARE.
 
 import uuid
-from sqlalchemy import ForeignKey, Column, String, UniqueConstraint, UUID
-from sqlalchemy.orm import relationship
+from sqlalchemy import ForeignKey, String, UniqueConstraint, UUID
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 
-from mrmat_python_api_fastapi import Base
+from mrmat_python_api_fastapi import ORMBase
 
 
-class Owner(Base):
+class Owner(ORMBase):
     __tablename__ = 'owners'
     __schema__ = 'mrmat-python-api-fastapi'
-    #uid = Column(BigInteger().with_variant(Integer, 'sqlite'), primary_key=True)
-    uid = Column(String, primary_key=True, default=str(uuid.uuid4()))
-    client_id = Column(String(255), nullable=False, unique=True)
-    name = Column(String(255), nullable=False)
-    resources = relationship('Resource', back_populates='owner')
+    uid: Mapped[str] = mapped_column(String, primary_key=True, default=str(uuid.uuid4()))
+
+    client_id: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
+    name: Mapped[str] = mapped_column(String(255), nullable=False)
+    resources: Mapped[list["Resource"]] = relationship('Resource', back_populates='owner')
 
 
-class Resource(Base):
+class Resource(ORMBase):
     __tablename__ = 'resources'
     __schema__ = 'mrmat-python-api-fastapi'
-    uid = Column(String, primary_key=True, default=str(uuid.uuid4()))
-    owner_uid = Column(String, ForeignKey('owners.uid'), nullable=False)
-    name = Column(String(255), nullable=False)
+    uid: Mapped[str] = mapped_column(String, primary_key=True, default=str(uuid.uuid4()))
+    owner_uid: Mapped[str] = mapped_column(String, ForeignKey('owners.uid'), nullable=False)
+    name: Mapped[str] = mapped_column(String(255), nullable=False)
 
-    owner = relationship('Owner', back_populates='resources')
-    UniqueConstraint('owner_uid', 'name', name='no_duplicate_names_per_owner')
+    owner: Mapped["Owner"] = relationship('Owner', back_populates='resources')
+    __table_args__ = (UniqueConstraint('owner_uid', 'name', name='no_duplicate_names_per_owner'),)

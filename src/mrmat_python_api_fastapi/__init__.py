@@ -23,10 +23,11 @@ from pydantic import BaseModel
 
 from .config import Config
 app_config = Config.from_json_file()
+from sqlalchemy.orm import DeclarativeBase
 
-from sqlalchemy.orm import declarative_base
-Base = declarative_base()
+class ORMBase(DeclarativeBase):
+    pass
 
 
-class BaseSchema(BaseModel):
+class SchemaBase(BaseModel):
     model_config = {'from_attributes': True}
