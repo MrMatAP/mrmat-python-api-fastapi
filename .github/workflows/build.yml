@@ -73,7 +73,6 @@ jobs:
         pip install --user -r requirements.txt -r requirements.dev.txt
         PYTHONPATH=${GITHUB_WORKSPACE}/src pytest
         PYTHONPATH=${GITHUB_WORKSPACE}/src python -m build --wheel -n
-        ls build
 
     - name: Upload test results
       uses: actions/upload-artifact@v4
