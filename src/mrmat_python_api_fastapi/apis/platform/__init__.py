@@ -20,30 +20,4 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-from fastapi import FastAPI
-
-from mrmat_python_api_fastapi.apis.healthz import api_healthz
-from mrmat_python_api_fastapi.apis.greeting import api_greeting_v1, api_greeting_v2, api_greeting_v3
-from mrmat_python_api_fastapi.apis.platform import api_platform_v1
-
-app = FastAPI(title='MrMat :: Python :: API :: FastAPI')
-app.include_router(api_healthz, prefix='/api/healthz', tags=['health'])
-app.include_router(api_greeting_v1, prefix='/api/greeting/v1', tags=['greeting'])
-app.include_router(api_greeting_v2, prefix='/api/greeting/v2', tags=['greeting'])
-app.include_router(api_greeting_v3, prefix='/api/greeting/v3', tags=['greeting'])
-app.include_router(api_platform_v1, prefix='/api/platform/v1', tags=['platform'])
-
-
-@app.get('/')
-def index():
-    return {'Hello': 'World'}
-
-def run() -> int:
-    """
-    This is the main entry point for the application when running via the CLI wrapper
-    Returns:
-        - int: The exit code
-    """
-    import uvicorn
-    uvicorn.run(app, host='0.0.0.0', port=8000)
-    return 0
+from .v1 import api_platform_v1

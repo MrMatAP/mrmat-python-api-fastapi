@@ -20,26 +20,12 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-from pydantic import BaseModel
-
-
-class OwnerInputSchema(BaseModel):
-    name: str
-
-
-class OwnerSchema(OwnerInputSchema):
-    id: int
-
-    class Config:
-        from_attributes = True
-
-
-class ResourceInputSchema(BaseModel):
-    name: str
-
-
-class ResourceSchema(ResourceInputSchema):
-    name: str
-
-    class Config:
-        from_attributes = True
+from .api import router as api_platform_v1
+from .schema import (
+    ResourceSchema,
+    ResourceInputSchema,
+    ResourceListSchema,
+    OwnerSchema,
+    OwnerInputSchema,
+    OwnerListSchema
+)

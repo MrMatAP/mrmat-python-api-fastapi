@@ -1,6 +1,6 @@
 #  MIT License
 #
-#  Copyright (c) 2022 Mathieu Imfeld
+#  Copyright (c) 2025 Mathieu Imfeld
 #
 #  Permission is hereby granted, free of charge, to any person obtaining a copy
 #  of this software and associated documentation files (the "Software"), to deal
@@ -20,4 +20,21 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-from .v1 import api_resource_v1
+import fastapi.testclient
+
+from mrmat_python_api_fastapi.apis.healthz.api import HealthzSchema, LivenessSchema, ReadinessSchema
+
+def test_healthz(client: fastapi.testclient.TestClient):
+    response = client.get("/api/healthz")
+    assert response.status_code == 200
+    assert HealthzSchema.model_validate(response.json(), strict=True)
+
+def test_liveness(client: fastapi.testclient.TestClient):
+    response = client.get("/api/healthz/liveness")
+    assert response.status_code == 200
+    assert LivenessSchema.model_validate(response.json(), strict=True)
+
+def test_readiness(client: fastapi.testclient.TestClient):
+    response = client.get("/api/healthz/readiness")
+    assert response.status_code == 200
+    assert ReadinessSchema.model_validate(response.json(), strict=True)

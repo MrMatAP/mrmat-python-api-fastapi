@@ -20,5 +20,33 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-def test_excuse():
-    assert True
+import typing
+
+from pydantic import BaseModel
+
+class OwnerInputSchema(BaseModel):
+    name: str
+
+class OwnerSchema(OwnerInputSchema):
+    uid: str
+
+    class Config:
+        from_attributes = True
+
+class OwnerListSchema(BaseModel):
+    owners: typing.List[OwnerSchema]
+
+class ResourceInputSchema(BaseModel):
+    name: str
+    owner_uid: str
+
+
+class ResourceSchema(ResourceInputSchema):
+    uid: str
+    name: str
+
+    class Config:
+        from_attributes = True
+
+class ResourceListSchema(BaseModel):
+    resources: typing.List[ResourceSchema]

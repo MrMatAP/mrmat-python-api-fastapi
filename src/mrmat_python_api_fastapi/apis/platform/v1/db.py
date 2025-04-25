@@ -20,7 +20,8 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-from sqlalchemy import ForeignKey, Column, Integer, String, UniqueConstraint, BigInteger
+import uuid
+from sqlalchemy import ForeignKey, Column, String, UniqueConstraint, UUID
 from sqlalchemy.orm import relationship
 
 from mrmat_python_api_fastapi import Base
@@ -29,7 +30,8 @@ from mrmat_python_api_fastapi import Base
 class Owner(Base):
     __tablename__ = 'owners'
     __schema__ = 'mrmat-python-api-fastapi'
-    id = Column(BigInteger().with_variant(Integer, 'sqlite'), primary_key=True)
+    #uid = Column(BigInteger().with_variant(Integer, 'sqlite'), primary_key=True)
+    uid = Column(String, primary_key=True, default=str(uuid.uuid4()))
     client_id = Column(String(255), nullable=False, unique=True)
     name = Column(String(255), nullable=False)
     resources = relationship('Resource', back_populates='owner')
@@ -38,9 +40,9 @@ class Owner(Base):
 class Resource(Base):
     __tablename__ = 'resources'
     __schema__ = 'mrmat-python-api-fastapi'
-    id = Column(BigInteger().with_variant(Integer, 'sqlite'), primary_key=True)
-    owner_id = Column(Integer, ForeignKey('owners.id'), nullable=False)
+    uid = Column(String, primary_key=True, default=str(uuid.uuid4()))
+    owner_uid = Column(String, ForeignKey('owners.uid'), nullable=False)
     name = Column(String(255), nullable=False)
 
     owner = relationship('Owner', back_populates='resources')
-    UniqueConstraint('owner_id', 'name', name='no_duplicate_names_per_owner')
+    UniqueConstraint('owner_uid', 'name', name='no_duplicate_names_per_owner')
