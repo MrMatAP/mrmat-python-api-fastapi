@@ -22,31 +22,25 @@
 
 import typing
 
-from pydantic import BaseModel
+from mrmat_python_api_fastapi import BaseSchema
 
-class OwnerInputSchema(BaseModel):
+
+class OwnerInputSchema(BaseSchema):
     name: str
 
 class OwnerSchema(OwnerInputSchema):
     uid: str
 
-    class Config:
-        from_attributes = True
-
-class OwnerListSchema(BaseModel):
+class OwnerListSchema(BaseSchema):
     owners: typing.List[OwnerSchema]
 
-class ResourceInputSchema(BaseModel):
+class ResourceInputSchema(BaseSchema):
     name: str
     owner_uid: str
-
 
 class ResourceSchema(ResourceInputSchema):
     uid: str
     name: str
 
-    class Config:
-        from_attributes = True
-
-class ResourceListSchema(BaseModel):
+class ResourceListSchema(BaseSchema):
     resources: typing.List[ResourceSchema]

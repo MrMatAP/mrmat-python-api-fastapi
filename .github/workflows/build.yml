@@ -71,7 +71,7 @@ jobs:
       run: |
         export PYTHONUSERBASE=${HOME}/.local
         pip install --user -r requirements.txt -r requirements.dev.txt
-        PYTHONPATH=${GITHUB_WORKSPACE}/src python -m pytest --cov=mrmat_python_api_fastapi
+        PYTHONPATH=${GITHUB_WORKSPACE}/src pytest
         PYTHONPATH=${GITHUB_WORKSPACE}/src python -m build --wheel -n
         ls build
 

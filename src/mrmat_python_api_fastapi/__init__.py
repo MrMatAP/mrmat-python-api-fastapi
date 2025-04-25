@@ -19,9 +19,14 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
+from pydantic import BaseModel
 
 from .config import Config
 app_config = Config.from_json_file()
 
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 Base = declarative_base()
+
+
+class BaseSchema(BaseModel):
+    model_config = {'from_attributes': True}

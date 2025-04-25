@@ -31,7 +31,7 @@ from mrmat_python_api_fastapi import app_config, Base
 @lru_cache
 def get_db() -> Session:
     if app_config.db_url.startswith('sqlite'):
-        engine = create_engine(url=app_config.db_url, connect_args={'check_same_thread': False}, echo=True)
+        engine = create_engine(url=app_config.db_url, connect_args={'check_same_thread': False})
     else:
         engine = create_engine(url=app_config.db_url)
     session_local = sessionmaker(bind=engine)

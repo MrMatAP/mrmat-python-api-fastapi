@@ -73,7 +73,7 @@ async def get_resource(uid: str,
                        response: Response,
                        session: Session = Depends(get_db)):
     try:
-        resource = session.query(Resource).get(uid)
+        resource = session.get(Resource, uid)
         if not resource:
             response.status_code = 404
             return StatusSchema(code=404, msg='The resource was not found')
@@ -124,15 +124,15 @@ async def create_resource(data: ResourceInputSchema,
 async def modify_resource(uid: str,
                           data: ResourceInputSchema,
                           response: Response,
-                          db: Session = Depends(get_db)):
+                          session: Session = Depends(get_db)):
     try:
-        resource = db.query(Resource).get(uid)
+        resource = session.get(Resource, uid)
         if not resource:
             response.status_code = 404
             return StatusSchema(code=404, msg='Not found')
         resource.name = data.name
-        db.add(resource)
-        db.commit()
+        session.add(resource)
+        session.commit()
         return ResourceSchema(uid=resource.uid,
                               owner_uid=resource.owner_uid,
                               name=resource.name)
@@ -158,7 +158,7 @@ async def remove_resource(uid: str,
                           response: Response,
                           session: Session = Depends(get_db)):
     try:
-        resource = session.query(Resource).get(uid)
+        resource = session.get(Resource, uid)
         if not resource:
             response.status_code = 410
             return StatusSchema(code=410, msg='The resource was already gone')
@@ -203,7 +203,7 @@ async def get_owner(uid: str,
                     response: Response,
                     session: Session = Depends(get_db)):
     try:
-        owner = session.query(Owner).get(uid)
+        owner = session.get(Owner, uid)
         if not owner:
             response.status_code = 404
             return StatusSchema(code=404, msg='The owner was not found')
@@ -250,15 +250,15 @@ async def create_owner(data: OwnerInputSchema,
 async def modify_owner(uid: str,
                        data: OwnerInputSchema,
                        response: Response,
-                       db: Session = Depends(get_db)):
+                       session: Session = Depends(get_db)):
     try:
-        owner = db.query(Owner).get(uid)
+        owner = session.get(Owner, uid)
         if not owner:
             response.status_code = 404
             return StatusSchema(code=404, msg='The owner was not found')
         owner.name = data.name
-        db.add(owner)
-        db.commit()
+        session.add(owner)
+        session.commit()
         return OwnerSchema(uid=owner.uid, name=owner.name)
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail="A database error occurred") from e
@@ -280,11 +280,14 @@ async def modify_owner(uid: str,
                })
 async def remove_owner(uid: str,
                        response: Response,
-                       db: Session = Depends(get_db)):
-    owner = db.query(Owner).get(uid)
-    if not owner:
-        response.status_code = status.HTTP_410_GONE
-        return
-    db.delete(owner)
-    db.commit()
-    response.status_code = status.HTTP_204_NO_CONTENT
+                       session: Session = Depends(get_db)):
+    try:
+        owner = session.get(Owner, uid)
+        if not owner:
+            response.status_code = status.HTTP_410_GONE
+            return
+        session.delete(owner)
+        session.commit()
+        response.status_code = status.HTTP_204_NO_CONTENT
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail="A database error occurred") from e
