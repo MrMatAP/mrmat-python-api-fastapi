@@ -9,7 +9,7 @@ name: Build
 env:
   MAJOR: 0
   MINOR: 0
-  PYTHON_VERSION: 3.12.0
+  PYTHON_VERSION: 3.13.0
 
 #
 # Establish when the workflow is run
@@ -75,7 +75,7 @@ jobs:
         PYTHONPATH=${GITHUB_WORKSPACE} python -m build --wheel -n
 
     - name: Upload test results
-      uses: actions/upload-artifact@v3.0.0
+      uses: actions/upload-artifact@v3
       if: ${{ always() }}
       with:
         name: Test and Coverage
