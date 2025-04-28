@@ -1,7 +1,8 @@
 FROM python:3.12-alpine AS build
 ARG MRMAT_VERSION="0.0.0.dev0"
-ADD dist/mrmat_python_api_fastapi-*-py3-none-any.whl /
-RUN pip install --user /mrmat_python_api_fastapi-*-py3-none-any.whl
+ARG WHEEL=""
+ADD "$WHEEL" /
+RUN pip install --user /mrmat_python_api_fastapi-*.whl
 
 FROM python:3.12-alpine
 ARG MRMAT_VERSION="0.0.0.dev0"
