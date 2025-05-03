@@ -47,5 +47,8 @@ helm-install: $(HELM_TARGET)
 		--create-namespace \
 		--namespace mrmat-python-api-fastapi
 
+helm-uninstall:
+	helm delete -n mrmat-python-api-fastapi mrmat-python-api-fastapi
+
 clean:
 	rm -rf build dist
