@@ -43,6 +43,7 @@ helm-install: $(HELM_TARGET)
 		mrmat-python-api-fastapi \
 		${HELM_TARGET} \
 		--install \
+		--force \
 		--create-namespace \
 		--namespace mrmat-python-api-fastapi
 

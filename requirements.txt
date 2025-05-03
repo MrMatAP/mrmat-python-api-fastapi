@@ -5,3 +5,4 @@ fastapi==0.115.11            # MIT
 sqlalchemy[asyncio]==2.0.40  # MIT
 uvicorn==0.34.0              # BSD 3-Clause
 pydantic==2.10.6             # MIT
+prometheus-fastapi-instrumentator==7.1.0    # ISC

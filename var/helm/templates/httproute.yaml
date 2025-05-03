@@ -13,13 +13,13 @@ spec:
   {{- range .Values.httproute.hostnames }}
   - {{ . | quote }}
   {{- end }}
-  - mrmat-python-api-fastapi.local
   parentRefs:
   {{- range .Values.httproute.parents }}
   - group: gateway.networking.k8s.io
     kind: Gateway
     name: {{ .name }}
     namespace: {{ .namespace }}
+    sectionName: mrmat-python-api-fastapi
   {{- end }}
   rules:
   - backendRefs:

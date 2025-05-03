@@ -23,9 +23,9 @@ httproute:
   enabled: true
   name: mrmat-python-api-fastapi-httproute
   hostnames:
-  - mrmat-python-api-fastapi.local
+  - mrmat-python-api-fastapi.covenant.local
   parents:
-  - name: istio-ingress
+  - name: edge-ingress
     namespace: edge
 
 ingress:

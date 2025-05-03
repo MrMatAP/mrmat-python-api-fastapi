@@ -22,6 +22,8 @@
 
 from fastapi import FastAPI
 
+from prometheus_fastapi_instrumentator import Instrumentator
+
 from mrmat_python_api_fastapi.apis.healthz import api_healthz
 from mrmat_python_api_fastapi.apis.greeting import api_greeting_v1, api_greeting_v2, api_greeting_v3
 from mrmat_python_api_fastapi.apis.platform import api_platform_v1
@@ -33,6 +35,7 @@ app.include_router(api_greeting_v2, prefix='/api/greeting/v2', tags=['greeting']
 app.include_router(api_greeting_v3, prefix='/api/greeting/v3', tags=['greeting'])
 app.include_router(api_platform_v1, prefix='/api/platform/v1', tags=['platform'])
 
+Instrumentator().instrument(app).expose(app)
 
 @app.get('/')
 def index():

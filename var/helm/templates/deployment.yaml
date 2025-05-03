@@ -19,6 +19,11 @@ spec:
         version: {{ .Chart.AppVersion }}
         app.kubernetes.io/name: mrmat-python-api-fastapi
         app.kubernetes.io/part-of: mrmat-python-api-fastapi
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/scheme: http
+        prometheus.io/port: "8000"
+        prometheus.io/path: /metrics
     spec:
       serviceAccountName: {{ .Values.serviceAccount.name }}
       containers:
