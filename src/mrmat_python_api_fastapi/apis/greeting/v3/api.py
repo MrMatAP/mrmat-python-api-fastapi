@@ -21,6 +21,7 @@
 #  SOFTWARE.
 
 from fastapi import APIRouter
+
 from mrmat_python_api_fastapi.apis.greeting.v3 import GreetingV3Output
 
 router = APIRouter()
