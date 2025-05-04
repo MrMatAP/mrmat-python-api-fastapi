@@ -14,6 +14,5 @@ RUN chown -R 1000:1000 /home/app/.local
 
 USER app:app
 EXPOSE 8000
-#CMD ["/home/app/.local/bin/uvicorn", "--host", "0.0.0.0", "--port", "8000", "mrmat_python_api_fastapi.app:app"]
 CMD ["/home/app/.local/bin/opentelemetry-instrument", \
      "/home/app/.local/bin/uvicorn", "--host", "0.0.0.0", "--port", "8000", "mrmat_python_api_fastapi.app:app"]
