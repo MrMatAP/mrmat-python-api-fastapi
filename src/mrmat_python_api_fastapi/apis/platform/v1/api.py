@@ -20,6 +20,8 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
+import uuid
+
 from fastapi import APIRouter, Depends, status, HTTPException
 from fastapi.responses import Response
 from sqlalchemy.exc import SQLAlchemyError
@@ -93,12 +95,13 @@ async def create_resource(data: ResourceInputSchema,
                           response: Response,
                           session: Session = Depends(get_db)):
     try:
-        resource = Resource(name=data.name, owner_uid=data.owner_uid)
+        resource = Resource(uid=str(uuid.uuid4()), name=data.name, owner_uid=data.owner_uid)
         session.add(resource)
         session.commit()
         response.status_code = 201
         return resource
     except SQLAlchemyError as e:
+        session.rollback()
         raise HTTPException(status_code=500, detail="A database error occurred") from e
 
 
@@ -131,6 +134,7 @@ async def modify_resource(uid: str,
         session.commit()
         return resource
     except SQLAlchemyError as e:
+        session.rollback()
         raise HTTPException(status_code=500, detail="A database error occurred") from e
 
 
@@ -161,6 +165,7 @@ async def remove_resource(uid: str,
         response.status_code = 204
         return {}
     except SQLAlchemyError as e:
+        session.rollback()
         raise HTTPException(status_code=500, detail="A database error occurred") from e
 
 
@@ -216,12 +221,13 @@ async def create_owner(data: OwnerInputSchema,
                        response: Response,
                        session: Session = Depends(get_db)):
     try:
-        owner = Owner(name=data.name, client_id='TODO')
+        owner = Owner(uid=str(uuid.uuid4()), name=data.name)
         session.add(owner)
         session.commit()
         response.status_code = 201
         return owner
     except SQLAlchemyError as e:
+        session.rollback()
         # Handle the error appropriately, maybe raise an HTTPException
         raise HTTPException(status_code=500, detail="A database error occurred") from e
 
@@ -255,6 +261,7 @@ async def modify_owner(uid: str,
         session.commit()
         return owner
     except SQLAlchemyError as e:
+        session.rollback()
         raise HTTPException(status_code=500, detail="A database error occurred") from e
 
 
@@ -284,4 +291,5 @@ async def remove_owner(uid: str,
         session.commit()
         response.status_code = status.HTTP_204_NO_CONTENT
     except SQLAlchemyError as e:
+        session.rollback()
         raise HTTPException(status_code=500, detail="A database error occurred") from e

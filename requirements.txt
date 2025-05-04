@@ -1,7 +1,32 @@
 #
 # Runtime requirements
 
-fastapi==0.115.11            # MIT
-sqlalchemy[asyncio]==2.0.40  # MIT
-uvicorn==0.34.0              # BSD 3-Clause
-pydantic==2.10.6             # MIT
+fastapi==0.115.11                               # MIT
+sqlalchemy[asyncio]==2.0.40                     # MIT
+uvicorn==0.34.0                                 # BSD 3-Clause
+pydantic==2.10.6                                # MIT
+psycopg2-binary==2.9.10                         # LGPL with exceptions
+
+prometheus-fastapi-instrumentator==7.1.0        # ISC
+
+# For zero-code-instrumentation
+# Check the requirements by using opentelemetry-bootstrap -a requirements
+opentelemetry-distro                            # Apache 2.0
+opentelemetry-exporter-otlp
+opentelemetry-instrumentation-asyncio==0.53b1
+opentelemetry-instrumentation-dbapi==0.53b1
+opentelemetry-instrumentation-logging==0.53b1
+opentelemetry-instrumentation-sqlite3==0.53b1
+opentelemetry-instrumentation-threading==0.53b1
+opentelemetry-instrumentation-urllib==0.53b1
+opentelemetry-instrumentation-wsgi==0.53b1
+opentelemetry-instrumentation-asgi==0.53b1
+opentelemetry-instrumentation-click==0.53b1
+opentelemetry-instrumentation-fastapi==0.53b1
+opentelemetry-instrumentation-grpc==0.53b1
+opentelemetry-instrumentation-httpx==0.53b1
+opentelemetry-instrumentation-requests==0.53b1
+opentelemetry-instrumentation-sqlalchemy==0.53b1
+opentelemetry-instrumentation-starlette==0.53b1
+opentelemetry-instrumentation-tortoiseorm==0.53b1
+opentelemetry-instrumentation-urllib3==0.53b1

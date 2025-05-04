@@ -35,5 +35,6 @@ def get_db() -> Session:
     else:
         engine = create_engine(url=app_config.db_url)
     session_local = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    ORMBase.metadata.create_all(bind=engine)
+    with session_local():
+        ORMBase.metadata.create_all(bind=engine)
     return session_local()

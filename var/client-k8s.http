@@ -1,0 +1,19 @@
+### GET Owners
+GET https://mpafastapi.covenant.local/api/platform/v1/owners
+
+### GET resources
+GET https://mpafastapi.covenant.local/api/platform/v1/resources
+
+### Create Owner
+POST https://mpafastapi.covenant.local/api/platform/v1/owners
+Content-Type: application/json
+
+{
+    "name": "MrMat"
+}
+
+> {%
+    const owner_uid = jsonPath(response.body, ".owner_uid")
+ %}
+
+###

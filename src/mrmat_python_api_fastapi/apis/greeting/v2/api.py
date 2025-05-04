@@ -26,6 +26,7 @@ Blueprint for the Greeting API in V2
 
 from typing import Optional
 from fastapi import APIRouter
+
 from mrmat_python_api_fastapi.apis.greeting.v2 import GreetingV2Output
 
 router = APIRouter()
