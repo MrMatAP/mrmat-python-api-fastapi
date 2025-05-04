@@ -39,16 +39,17 @@ container: $(PYTHON_TARGET) $(CONTAINER_SOURCES)
 	docker push localhost:5001/mrmat-python-api-fastapi:$(VERSION)
 
 helm-install: $(HELM_TARGET)
+	kubectl create ns mpafastapi || true
+	kubectl label --overwrite ns mpafastapi istio-injection=true
 	helm upgrade \
 		mrmat-python-api-fastapi \
 		${HELM_TARGET} \
 		--install \
 		--force \
-		--create-namespace \
-		--namespace mrmat-python-api-fastapi
+		--namespace mpafastapi
 
 helm-uninstall:
-	helm delete -n mrmat-python-api-fastapi mrmat-python-api-fastapi
+	helm delete -n mpafastapi mrmat-python-api-fastapi
 
 clean:
 	rm -rf build dist
