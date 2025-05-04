@@ -10,9 +10,9 @@ serviceAccount:
 
 pod:
   name: mrmat-python-api-fastapi
-  replicas: 2
+  replicas: 1
   repository: registry:5000/mrmat-python-api-fastapi
-  imagePullPolicy: IfNotPresent
+  imagePullPolicy: Always
   port: 8000
 
 service:
