@@ -1,46 +1,28 @@
 #
-# Default values
+# Default values for MrMat :: Python API FastAPI
 
-# This is to override the chart name.
-nameOverride: ""
-fullnameOverride: ""
-
-serviceAccount:
-  name: mrmat-python-api-fastapi-sa
+sa:
+  name: sa-mpafastapi
 
 pod:
-  name: mrmat-python-api-fastapi
+  name: mpafastapi
   replicas: 1
   repository: registry:5000/mrmat-python-api-fastapi
   imagePullPolicy: Always
   port: 8000
 
-service:
-  name: mrmat-python-api-fastapi-svc
+svc:
+  name: svc-mpafastapi
   port: 80
 
-httproute:
+route:
   enabled: true
-  name: mrmat-python-api-fastapi-httproute
+  name: route-mpafastapi
   hostnames:
-  - mrmat-python-api-fastapi.covenant.local
+  - mpafastapi.covenant.local
   parents:
   - name: edge-ingress
     namespace: edge
 
-ingress:
-  enabled: false
-  name: mrmat-python-api-fastapi-ing
-  className: ""
-  annotations: { }
-    # kubernetes.io/ingress.class: nginx
-  # kubernetes.io/tls-acme: "true"
-  hosts:
-  - host: mrmat-python-api-fastapi.local
-    paths:
-    - path: /
-      pathType: ImplementationSpecific
-  tls: [ ]
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+config:
+  db_url: "sqlite:///data/db.sqlite"

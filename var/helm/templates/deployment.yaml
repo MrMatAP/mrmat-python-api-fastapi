@@ -1,36 +1,41 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mrmat-python-api-fastapi
+  name: mpafastapi
   labels:
-    app.kubernetes.io/name: mrmat-python-api-fastapi
-    app.kubernetes.io/part-of: mrmat-python-api-fastapi
+    app.kubernetes.io/name: mpafastapi
+    {{ include "common.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.pod.replicas | int }}
   selector:
     matchLabels:
-      app: {{ .Values.pod.name }}
-      version: {{ .Chart.AppVersion }}
+      {{ include "common.labels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        sidecar.istio.io/inject: "true"
-        app: {{ .Values.pod.name }}
-        version: {{ .Chart.AppVersion }}
-        app.kubernetes.io/name: mrmat-python-api-fastapi
-        app.kubernetes.io/part-of: mrmat-python-api-fastapi
+        {{ include "common.labels" . | nindent 8 }}
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/scheme: http
         prometheus.io/port: "8000"
         prometheus.io/path: /metrics
     spec:
-      serviceAccountName: {{ .Values.serviceAccount.name }}
+      serviceAccountName: {{ .Values.sa.name }}
+      volumes:
+      - name: config-volume
+        secret:
+          secretName: config-mpafastapi
+      - name: data-volume
+        emptyDir:
+          sizeLimit: 10Mi
+          medium: Memory
       containers:
-        - name: mrmat-python-api-fastapi
+        - name: mpafastapi
           image: {{ .Values.pod.repository }}:{{ .Chart.AppVersion }}
           imagePullPolicy: {{ .Values.pod.imagePullPolicy }}
           env:
+          - name: APP_CONFIG
+            value: /config/app_config.json
           - name: OTEL_SERVICE_NAME
             value: "mrmat-python-api-fastapi"
           - name: OTEL_TRACES_EXPORTER
@@ -51,6 +56,12 @@ spec:
           - name: http
             containerPort: {{ .Values.pod.port }}
             protocol: TCP
+          volumeMounts:
+          - name: config-volume
+            mountPath: /config
+            readOnly: true
+          - name: data-volume
+            mountPath: /data
           securityContext:
             capabilities:
               drop:
