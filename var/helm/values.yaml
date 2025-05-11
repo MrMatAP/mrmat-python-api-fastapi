@@ -25,4 +25,4 @@ route:
     namespace: edge
 
 config:
-  db_url: "sqlite:///data/db.sqlite"
+  db_url: "sqlite:///"
