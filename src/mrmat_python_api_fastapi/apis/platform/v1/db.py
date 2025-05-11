@@ -20,8 +20,7 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-import uuid
-from sqlalchemy import ForeignKey, String, UniqueConstraint, UUID
+from sqlalchemy import ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from mrmat_python_api_fastapi import ORMBase
