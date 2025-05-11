@@ -10,7 +10,7 @@ Create a virtual environment, then:
 
 ```shell
 (venv) $ pip install -r requirements.txt
-(venv) $ python python -m build -n --wheel
+(venv) $ python -m build -n --wheel
 ```
 
 If you intend to run the testsuite or work on the code, then also install the requirements from `requirements.dev.txt`. You can run the testsuite using
