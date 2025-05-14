@@ -16,7 +16,7 @@ svc:
   port: 80
 
 route:
-  enabled: true
+  enabled: false
   name: route-mpafastapi
   hostnames:
   - mpafastapi.covenant.local
@@ -24,5 +24,9 @@ route:
   - name: edge-ingress
     namespace: edge
 
+ingress:
+  enabled: true
+  hostname: mpafastapi.nostromo.k8s
+
 config:
-  db_url: "sqlite:///"
+  db_url: "sqlite://data/db.sqlite3"
