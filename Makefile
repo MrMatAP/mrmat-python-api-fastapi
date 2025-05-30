@@ -15,6 +15,8 @@ CONTAINER_SOURCES := $(shell find var/container)
 HELM_SOURCES := $(shell find var/helm)
 HELM_TARGET := dist/mrmat-python-api-fastapi-$(VERSION).tgz
 
+ISTIO := ambient
+
 all: python container helm
 python: $(PYTHON_TARGET)
 helm: $(HELM_TARGET)
@@ -40,11 +42,13 @@ container: $(PYTHON_TARGET) $(CONTAINER_SOURCES)
 
 helm-install: $(HELM_TARGET)
 	kubectl create ns mpafastapi || true
-	kubectl label --overwrite ns mpafastapi istio-injection=true
+	if test "$(ISTIO)" == "sidecar"; then kubectl label --overwrite ns mpafastapi istio-injection=true; fi
+	if test "$(ISTIO)" == "ambient"; then kubectl label --overwrite ns mpafastapi istio.io/dataplane-mode=ambient; fi
 	helm upgrade \
 		mrmat-python-api-fastapi \
 		${HELM_TARGET} \
 		--install \
+		--wait \
 		--force \
 		--namespace mpafastapi
 
