@@ -15,18 +15,25 @@ svc:
   name: svc-mpafastapi
   port: 80
 
+edge:
+  ns: edge
+  name: edge-ingress
+  kind: istio-gateway-api
+
 route:
   enabled: false
   name: route-mpafastapi
   hostnames:
-  - mpafastapi.covenant.local
+  - mpafastapi.nostromo.k8s
   parents:
   - name: edge-ingress
     namespace: edge
 
+istio: ambient
+
 ingress:
-  enabled: true
+  enabled: false
   hostname: mpafastapi.nostromo.k8s
 
 config:
-  db_url: "sqlite://data/db.sqlite3"
+  db_url: "sqlite:////data/db.sqlite3"
