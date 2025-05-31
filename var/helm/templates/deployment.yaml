@@ -37,7 +37,7 @@ spec:
           - name: APP_CONFIG
             value: /config/app_config.json
           - name: OTEL_SERVICE_NAME
-            value: "mrmat-python-api-fastapi"
+            value: "{{ .Release.Namespace }}.mpafastapi"
           - name: OTEL_TRACES_EXPORTER
             value: "otlp"
           - name: OTEL_METRICS_EXPORTER

@@ -1,4 +1,4 @@
-{{- if .Values.route.enabled -}}
+{{- if eq .Values.edge.kind "istio-gateway-api" -}}
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -11,13 +11,11 @@ spec:
   - {{ . | quote }}
   {{- end }}
   parentRefs:
-  {{- range .Values.route.parents }}
   - group: gateway.networking.k8s.io
     kind: Gateway
-    name: {{ .name }}
-    namespace: {{ .namespace }}
+    name: {{ .Values.edge.name }}
+    namespace: {{ .Values.edge.ns }}
     sectionName: mpafastapi
-  {{- end }}
   rules:
   - backendRefs:
     - kind: Service

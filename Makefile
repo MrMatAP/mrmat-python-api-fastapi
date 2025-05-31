@@ -15,6 +15,7 @@ CONTAINER_SOURCES := $(shell find var/container)
 HELM_SOURCES := $(shell find var/helm)
 HELM_TARGET := dist/mrmat-python-api-fastapi-$(VERSION).tgz
 
+# Can be either 'sidecar' or 'ambient'
 ISTIO := ambient
 
 all: python container helm
@@ -50,7 +51,8 @@ helm-install: $(HELM_TARGET)
 		--install \
 		--wait \
 		--force \
-		--namespace mpafastapi
+		--namespace mpafastapi \
+		--set istio=$(ISTIO)
 
 helm-uninstall:
 	helm delete -n mpafastapi mrmat-python-api-fastapi
