@@ -1,11 +1,11 @@
 ### GET Owners
-GET https://mpafastapi.covenant.local/api/platform/v1/owners
+GET https://mpafastapi.covenant.k8s/api/platform/v1/owners
 
 ### GET resources
-GET https://mpafastapi.covenant.local/api/platform/v1/resources
+GET https://mpafastapi.covenant.k8s/api/platform/v1/resources
 
 ### Create Owner
-POST https://mpafastapi.covenant.local/api/platform/v1/owners
+POST https://mpafastapi.covenant.k8s/api/platform/v1/owners
 Content-Type: application/json
 
 {
