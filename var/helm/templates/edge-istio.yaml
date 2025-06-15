@@ -4,11 +4,30 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: waypoint
-  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: waypoint
+    {{ include "common.labels" . | nindent 4 }}
 spec:
   gatewayClassName: istio-waypoint
   listeners:
   - name: mesh
     port: 15008
     protocol: HBONE
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: vs
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: vs
+    {{ include "common.labels" . | nindent 4 }}
+spec:
+  hosts:
+  - mpafastapi.{{ .Release.Namespace }}.svc.cluster.local
+  http:
+  - name: "mpafastapi"
+    route:
+    - destination:
+        host: svc-mpafastapi.{{ .Release.Namespace }}.svc.cluster.local
 {{- end }}

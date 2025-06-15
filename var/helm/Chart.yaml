@@ -1,6 +1,18 @@
 apiVersion: v2
 name: mrmat-python-api-fastapi
 description: A Helm chart for MrMat Python API FastAPI
+home: https://github.com/MrMatAP/mrmat-python-api-fastapi
+sources:
+- https://github.com/MrMatAP/mrmat-python-api-fastapi
+maintainers:
+- name: MrMat
+  email: imfeldma@gmail.com
+  url: https://github.com/MrMatAP
+annotations:
+  org.opencontainers.image.title: "MrMat :: Python API :: FastAPI"
+  org.opencontainers.image.authors: "MrMat"
+  org.opencontainers.image.vendor: "The MrMat Organisation"
+  org.opencontainers.image.licenses: "MIT"
 type: application
 version: "0.0.0"
 appVersion: "0.0.0.dev0"

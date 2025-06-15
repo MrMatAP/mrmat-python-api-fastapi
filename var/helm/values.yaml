@@ -1,6 +1,12 @@
 #
 # Default values for MrMat :: Python API FastAPI
 
+cluster:
+  mesh: istio
+  gateway_api: true
+  name: cluster
+  domain: k8s
+
 sa:
   name: sa-mpafastapi
 
@@ -21,19 +27,10 @@ edge:
   kind: istio-gateway-api
 
 route:
-  enabled: false
-  name: route-mpafastapi
-  hostnames:
-  - mpafastapi.nostromo.k8s
-  parents:
-  - name: edge-ingress
-    namespace: edge
-
-istio: ambient
+  hostname: mpafastapi
 
 ingress:
-  enabled: false
-  hostname: mpafastapi.nostromo.k8s
+  hostname: mpafastapi
 
 config:
   db_url: "sqlite:////data/db.sqlite3"

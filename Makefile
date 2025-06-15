@@ -15,8 +15,18 @@ CONTAINER_SOURCES := $(shell find var/container)
 HELM_SOURCES := $(shell find var/helm)
 HELM_TARGET := dist/mrmat-python-api-fastapi-$(VERSION).tgz
 
-# Can be either 'sidecar' or 'ambient'
-ISTIO := ambient
+# My cluster names default to the hostname they run on
+CLUSTER_NAME := $(shell hostname -s)
+# Can be either 'istio-sidecar' or 'istio-ambient'
+MESH := istio-ambient
+# Can be 'ingress', 'gateway-api' or 'istio'
+EDGE := gateway-api
+
+# How the container then connects to its datastore
+API_DB_URL="sqlite:////data/db.sqlite3"
+
+# All of this can be overridden by the include in ~/etc/api-secrets.mk
+-include ~/etc/secrets.mk
 
 all: python container helm
 python: $(PYTHON_TARGET)
@@ -27,15 +37,17 @@ $(PYTHON_TARGET): $(PYTHON_SOURCES)
 
 $(HELM_TARGET): $(HELM_SOURCES) container
 	helm package \
-		--app-version "$(VERSION)" \
 		--version $(VERSION) \
+		--app-version "$(VERSION)" \
 		--destination dist/ \
 		var/helm
+	helm push dist/mrmat-python-api-fastapi-$(VERSION).tgz oci://localhost:5001/charts
 
-container: $(PYTHON_TARGET) $(CONTAINER_SOURCES)
+container: $(CONTAINER_SOURCES) $(PYTHON_TARGET)
 	docker build \
 		-f var/container/Dockerfile \
 		-t localhost:5001/mrmat-python-api-fastapi:$(VERSION) \
+		--build-arg GIT_SHA=$(GIT_SHA) \
 		--build-arg MRMAT_VERSION=$(VERSION) \
 		--build-arg WHEEL=$(PYTHON_TARGET) \
 		$(ROOT_PATH)
@@ -43,8 +55,8 @@ container: $(PYTHON_TARGET) $(CONTAINER_SOURCES)
 
 helm-install: $(HELM_TARGET)
 	kubectl create ns mpafastapi || true
-	if test "$(ISTIO)" == "sidecar"; then kubectl label --overwrite ns mpafastapi istio-injection=true; fi
-	if test "$(ISTIO)" == "ambient"; then kubectl label --overwrite ns mpafastapi istio.io/dataplane-mode=ambient; fi
+	if test "$(MESH)" == "istio-sidecar"; then kubectl label --overwrite ns mpafastapi istio-injection=true; fi
+	if test "$(MESH)" == "istio-ambient"; then kubectl label --overwrite ns mpafastapi istio.io/dataplane-mode=ambient; fi
 	helm upgrade \
 		mrmat-python-api-fastapi \
 		${HELM_TARGET} \
@@ -52,7 +64,10 @@ helm-install: $(HELM_TARGET)
 		--wait \
 		--force \
 		--namespace mpafastapi \
-		--set istio=$(ISTIO)
+		--set cluster.name=$(CLUSTER_NAME) \
+		--set cluster.mesh=$(MESH) \
+		--set edge.kind=$(EDGE) \
+		--set config.db_url=$(API_DB_URL)
 
 helm-uninstall:
 	helm delete -n mpafastapi mrmat-python-api-fastapi
