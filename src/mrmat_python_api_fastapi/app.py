@@ -22,6 +22,7 @@
 
 from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordBearer
+from fastapi.middleware.cors import CORSMiddleware
 
 from prometheus_fastapi_instrumentator import Instrumentator
 
@@ -30,6 +31,7 @@ from mrmat_python_api_fastapi.apis.greeting import api_greeting_v1, api_greeting
 from mrmat_python_api_fastapi.apis.platform import api_platform_v1
 
 app = FastAPI(title='MrMat :: Python :: API :: FastAPI')
+app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_credentials=True, allow_methods=['*'], allow_headers=['*'])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
 app.include_router(api_healthz, prefix='/api/healthz', tags=['health'])
 app.include_router(api_greeting_v1, prefix='/api/greeting/v1', tags=['greeting'])
