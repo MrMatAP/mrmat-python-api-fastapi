@@ -1,6 +1,6 @@
 # MrMat :: Python :: API :: FastAPI
 
-[![Build](https://github.com/MrMatOrg/mrmat-python-api-fastapi/actions/workflows/build.yml/badge.svg)](https://github.com/MrMatOrg/mrmat-python-api-fastapi/actions/workflows/build.yml)
+[![CI](https://github.com/MrMatOrg/mrmat-python-api-fastapi/actions/workflows/ci.yml/badge.svg)](https://github.com/MrMatOrg/mrmat-python-api-fastapi/actions/workflows/ci.yml)
 
 Boilerplate (and playground) for a code-first Python FastAPI API.
 
