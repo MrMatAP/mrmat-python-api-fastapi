@@ -1,18 +1,39 @@
 {{- if eq .Values.edge.kind "istio" }}
+{{/*---*/}}
+{{/*apiVersion: gateway.networking.k8s.io/v1*/}}
+{{/*kind: Gateway*/}}
+{{/*metadata:*/}}
+{{/*  name: waypoint*/}}
+{{/*  labels:*/}}
+{{/*    app.kubernetes.io/name: waypoint*/}}
+{{/*    {{ include "common.labels" . | nindent 4 }}*/}}
+{{/*spec:*/}}
+{{/*  gatewayClassName: istio-waypoint*/}}
+{{/*  listeners:*/}}
+{{/*  - name: mesh*/}}
+{{/*    port: 15008*/}}
+{{/*    protocol: HBONE*/}}
 ---
-apiVersion: gateway.networking.k8s.io/v1
+apiVersion: networking.istio.io/v1
 kind: Gateway
 metadata:
-  name: waypoint
+  name: gw
+  namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: waypoint
+    app.kubernetes.io/name: gw
     {{ include "common.labels" . | nindent 4 }}
 spec:
-  gatewayClassName: istio-waypoint
-  listeners:
-  - name: mesh
-    port: 15008
-    protocol: HBONE
+  selector:
+    app: mpafastapi
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - {{ .Values.ingress.hostname }}.{{ .Values.cluster.name }}.{{ .Values.cluster.domain }}
+    tls:
+      httpsRedirect: false
 ---
 apiVersion: networking.istio.io/v1
 kind: VirtualService
@@ -24,7 +45,9 @@ metadata:
     {{ include "common.labels" . | nindent 4 }}
 spec:
   hosts:
-  - mpafastapi.{{ .Release.Namespace }}.svc.cluster.local
+  - {{ .Values.ingress.hostname }}.{{ .Values.cluster.name }}.{{ .Values.cluster.domain }}
+  gateways:
+  - gw
   http:
   - name: "mpafastapi"
     route:
