@@ -22,17 +22,24 @@
 
 import fastapi.testclient
 
-from mrmat_python_api_fastapi.apis.healthz.api import HealthzSchema, LivenessSchema, ReadinessSchema
+from mrmat_python_api_fastapi.apis.healthz.api import (
+    HealthzSchema,
+    LivenessSchema,
+    ReadinessSchema,
+)
+
 
 def test_healthz(client: fastapi.testclient.TestClient):
     response = client.get("/api/healthz")
     assert response.status_code == 200
     assert HealthzSchema.model_validate(response.json(), strict=True)
 
+
 def test_liveness(client: fastapi.testclient.TestClient):
     response = client.get("/api/healthz/liveness")
     assert response.status_code == 200
     assert LivenessSchema.model_validate(response.json(), strict=True)
+
 
 def test_readiness(client: fastapi.testclient.TestClient):
     response = client.get("/api/healthz/readiness")

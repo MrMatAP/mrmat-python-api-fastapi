@@ -27,5 +27,5 @@ from .schema import (
     ResourceListSchema,
     OwnerSchema,
     OwnerInputSchema,
-    OwnerListSchema
+    OwnerListSchema,
 )

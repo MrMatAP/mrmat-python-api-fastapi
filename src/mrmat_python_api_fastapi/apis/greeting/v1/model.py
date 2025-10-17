@@ -24,4 +24,4 @@ from pydantic import BaseModel, Field
 
 
 class GreetingV1Output(BaseModel):
-    message: str = Field(default='Hello World', title='A generic greeting message')
+    message: str = Field(default="Hello World", title="A generic greeting message")

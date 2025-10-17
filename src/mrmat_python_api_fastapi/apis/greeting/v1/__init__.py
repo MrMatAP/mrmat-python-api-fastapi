@@ -20,5 +20,5 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-from .model import GreetingV1Output         # noqa: F401
+from .model import GreetingV1Output  # noqa: F401
 from .api import router as api_greeting_v1  # noqa: F401

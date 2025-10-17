@@ -27,5 +27,6 @@ class StatusSchema(BaseModel):
     """
     A generic message class
     """
+
     code: int
     msg: str

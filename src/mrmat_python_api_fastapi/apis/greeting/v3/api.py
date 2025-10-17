@@ -27,10 +27,12 @@ from mrmat_python_api_fastapi.apis.greeting.v3 import GreetingV3Output
 router = APIRouter()
 
 
-@router.get('/',
-            name='get_greeting_v3',
-            summary='Get a greeting for the authenticated name',
-            description='This version of the greeting API knows who you are',
-            response_model=GreetingV3Output)
+@router.get(
+    "/",
+    name="get_greeting_v3",
+    summary="Get a greeting for the authenticated name",
+    description="This version of the greeting API knows who you are",
+    response_model=GreetingV3Output,
+)
 async def get_greeting():
-    return GreetingV3Output(message='Hello foo')
+    return GreetingV3Output(message="Hello foo")

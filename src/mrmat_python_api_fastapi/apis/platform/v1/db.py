@@ -27,21 +27,27 @@ from mrmat_python_api_fastapi import ORMBase
 
 
 class Owner(ORMBase):
-    __tablename__ = 'owners'
-    __schema__ = 'mrmat-python-api-fastapi'
+    __tablename__ = "owners"
+    __schema__ = "mrmat-python-api-fastapi"
     uid: Mapped[str] = mapped_column(String, primary_key=True)
 
     client_id: Mapped[str] = mapped_column(String(255), nullable=True, unique=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
-    resources: Mapped[list["Resource"]] = relationship('Resource', back_populates='owner')
+    resources: Mapped[list["Resource"]] = relationship(
+        "Resource", back_populates="owner"
+    )
 
 
 class Resource(ORMBase):
-    __tablename__ = 'resources'
-    __schema__ = 'mrmat-python-api-fastapi'
+    __tablename__ = "resources"
+    __schema__ = "mrmat-python-api-fastapi"
     uid: Mapped[str] = mapped_column(String, primary_key=True)
-    owner_uid: Mapped[str] = mapped_column(String, ForeignKey('owners.uid'), nullable=False)
+    owner_uid: Mapped[str] = mapped_column(
+        String, ForeignKey("owners.uid"), nullable=False
+    )
     name: Mapped[str] = mapped_column(String(255), nullable=False)
 
-    owner: Mapped["Owner"] = relationship('Owner', back_populates='resources')
-    __table_args__ = (UniqueConstraint('owner_uid', 'name', name='no_duplicate_names_per_owner'),)
+    owner: Mapped["Owner"] = relationship("Owner", back_populates="resources")
+    __table_args__ = (
+        UniqueConstraint("owner_uid", "name", name="no_duplicate_names_per_owner"),
+    )

@@ -29,19 +29,24 @@ class Config:
     """
     A class to deal with application configuration
     """
+
     secret_key: str = secrets.token_urlsafe(16)
-    db_url: str = 'sqlite:///'
+    db_url: str = "sqlite:///"
 
     @staticmethod
-    def from_context(file: str | None = os.getenv('APP_CONFIG')):
+    def from_context(file: str | None = os.getenv("APP_CONFIG")):
         runtime_config = Config()
         if file and os.path.exists(file):
-            with open(file, 'r', encoding='UTF-8') as c:
+            with open(file, "r", encoding="UTF-8") as c:
                 file_config = json.load(c)
-            runtime_config.secret_key = file_config.get('secret_key', secrets.token_urlsafe(16))
-            runtime_config.db_url = file_config.get('db_url', 'sqlite:///')
-        if 'APP_CONFIG_SECRET_KEY' in os.environ:
-            runtime_config.secret_key = os.getenv('APP_CONFIG_SECRET_KEY', secrets.token_urlsafe(16))
-        if 'APP_CONFIG_DB_URL' in os.environ:
-            runtime_config.db_url = os.getenv('APP_CONFIG_DB_URL', '')
+            runtime_config.secret_key = file_config.get(
+                "secret_key", secrets.token_urlsafe(16)
+            )
+            runtime_config.db_url = file_config.get("db_url", "sqlite:///")
+        if "APP_CONFIG_SECRET_KEY" in os.environ:
+            runtime_config.secret_key = os.getenv(
+                "APP_CONFIG_SECRET_KEY", secrets.token_urlsafe(16)
+            )
+        if "APP_CONFIG_DB_URL" in os.environ:
+            runtime_config.db_url = os.getenv("APP_CONFIG_DB_URL", "")
         return runtime_config

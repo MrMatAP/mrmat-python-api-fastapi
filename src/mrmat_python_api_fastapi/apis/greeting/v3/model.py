@@ -28,4 +28,4 @@ from pydantic import BaseModel, Field
 
 
 class GreetingV3Output(BaseModel):
-    message: str = Field('A greeting message')
+    message: str = Field("A greeting message")

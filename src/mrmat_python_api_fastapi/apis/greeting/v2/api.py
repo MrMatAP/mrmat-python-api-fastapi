@@ -32,10 +32,12 @@ from mrmat_python_api_fastapi.apis.greeting.v2 import GreetingV2Output
 router = APIRouter()
 
 
-@router.get('/',
-            response_model=GreetingV2Output,
-            name='get_greeting_v2',
-            description='Get a greeting for a given name',
-            response_description='A JSON-encoded greeting for the provided name')
-async def get_greeting(name: Optional[str] = 'Stranger'):
-    return GreetingV2Output(message=f'Hello {name}')
+@router.get(
+    "/",
+    response_model=GreetingV2Output,
+    name="get_greeting_v2",
+    description="Get a greeting for a given name",
+    response_description="A JSON-encoded greeting for the provided name",
+)
+async def get_greeting(name: Optional[str] = "Stranger"):
+    return GreetingV2Output(message=f"Hello {name}")

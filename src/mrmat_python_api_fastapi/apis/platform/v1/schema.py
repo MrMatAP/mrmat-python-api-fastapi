@@ -28,18 +28,23 @@ from mrmat_python_api_fastapi import SchemaBase
 class OwnerInputSchema(SchemaBase):
     name: str
 
+
 class OwnerSchema(OwnerInputSchema):
     uid: str
 
+
 class OwnerListSchema(SchemaBase):
     owners: typing.Sequence[OwnerSchema]
+
 
 class ResourceInputSchema(SchemaBase):
     name: str
     owner_uid: str
 
+
 class ResourceSchema(ResourceInputSchema):
     uid: str
+
 
 class ResourceListSchema(SchemaBase):
     resources: typing.Sequence[ResourceSchema]

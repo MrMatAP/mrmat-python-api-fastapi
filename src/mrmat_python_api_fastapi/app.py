@@ -27,23 +27,35 @@ from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 
 from mrmat_python_api_fastapi.apis.healthz import api_healthz
-from mrmat_python_api_fastapi.apis.greeting import api_greeting_v1, api_greeting_v2, api_greeting_v3
+from mrmat_python_api_fastapi.apis.greeting import (
+    api_greeting_v1,
+    api_greeting_v2,
+    api_greeting_v3,
+)
 from mrmat_python_api_fastapi.apis.platform import api_platform_v1
 
-app = FastAPI(title='MrMat :: Python :: API :: FastAPI')
-app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_credentials=True, allow_methods=['*'], allow_headers=['*'])
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
-app.include_router(api_healthz, prefix='/api/healthz', tags=['health'])
-app.include_router(api_greeting_v1, prefix='/api/greeting/v1', tags=['greeting'])
-app.include_router(api_greeting_v2, prefix='/api/greeting/v2', tags=['greeting'])
-app.include_router(api_greeting_v3, prefix='/api/greeting/v3', tags=['greeting'])
-app.include_router(api_platform_v1, prefix='/api/platform/v1', tags=['platform'])
+app = FastAPI(title="MrMat :: Python :: API :: FastAPI")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+app.include_router(api_healthz, prefix="/api/healthz", tags=["health"])
+app.include_router(api_greeting_v1, prefix="/api/greeting/v1", tags=["greeting"])
+app.include_router(api_greeting_v2, prefix="/api/greeting/v2", tags=["greeting"])
+app.include_router(api_greeting_v3, prefix="/api/greeting/v3", tags=["greeting"])
+app.include_router(api_platform_v1, prefix="/api/platform/v1", tags=["platform"])
 
 Instrumentator().instrument(app).expose(app)
 
-@app.get('/')
+
+@app.get("/")
 def index():
-    return {'Hello': 'World'}
+    return {"Hello": "World"}
+
 
 def run() -> int:
     """
@@ -52,5 +64,6 @@ def run() -> int:
         - int: The exit code
     """
     import uvicorn
-    uvicorn.run(app, host='0.0.0.0', port=8000)
+
+    uvicorn.run(app, host="0.0.0.0", port=8000)
     return 0
