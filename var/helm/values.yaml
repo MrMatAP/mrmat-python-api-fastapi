@@ -24,7 +24,7 @@ svc:
 edge:
   ns: edge
   name: edge-ingress
-  kind: istio-gateway-api
+  kind: istio
 
 route:
   hostname: mpafastapi

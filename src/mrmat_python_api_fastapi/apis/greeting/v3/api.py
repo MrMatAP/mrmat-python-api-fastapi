@@ -1,6 +1,6 @@
 #  MIT License
 #
-#  Copyright (c) 2022 MrMat
+#  Copyright (c)  2025 Mathieu Imfeld
 #
 #  Permission is hereby granted, free of charge, to any person obtaining a copy
 #  of this software and associated documentation files (the "Software"), to deal
@@ -9,8 +9,8 @@
 #  copies of the Software, and to permit persons to whom the Software is
 #  furnished to do so, subject to the following conditions:
 #
-#  The above copyright notice and this permission notice shall be included in
-#  all copies or substantial portions of the Software.
+#  The above copyright notice and this permission notice shall be included in all
+#  copies or substantial portions of the Software.
 #
 #  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 #  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -27,10 +27,12 @@ from mrmat_python_api_fastapi.apis.greeting.v3 import GreetingV3Output
 router = APIRouter()
 
 
-@router.get('/',
-            name='get_greeting_v3',
-            summary='Get a greeting for the authenticated name',
-            description='This version of the greeting API knows who you are',
-            response_model=GreetingV3Output)
+@router.get(
+    "/",
+    name="get_greeting_v3",
+    summary="Get a greeting for the authenticated name",
+    description="This version of the greeting API knows who you are",
+    response_model=GreetingV3Output,
+)
 async def get_greeting():
-    return GreetingV3Output(message='Hello foo')
+    return GreetingV3Output(message="Hello foo")

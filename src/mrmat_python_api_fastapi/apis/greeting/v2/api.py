@@ -1,6 +1,10 @@
+"""
+Blueprint for the Greeting API in V2
+"""
+
 #  MIT License
 #
-#  Copyright (c) 2022 MrMat
+#  Copyright (c)  2025 Mathieu Imfeld
 #
 #  Permission is hereby granted, free of charge, to any person obtaining a copy
 #  of this software and associated documentation files (the "Software"), to deal
@@ -9,8 +13,8 @@
 #  copies of the Software, and to permit persons to whom the Software is
 #  furnished to do so, subject to the following conditions:
 #
-#  The above copyright notice and this permission notice shall be included in
-#  all copies or substantial portions of the Software.
+#  The above copyright notice and this permission notice shall be included in all
+#  copies or substantial portions of the Software.
 #
 #  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 #  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -20,10 +24,6 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-"""
-Blueprint for the Greeting API in V2
-"""
-
 from typing import Optional
 from fastapi import APIRouter
 
@@ -32,10 +32,12 @@ from mrmat_python_api_fastapi.apis.greeting.v2 import GreetingV2Output
 router = APIRouter()
 
 
-@router.get('/',
-            response_model=GreetingV2Output,
-            name='get_greeting_v2',
-            description='Get a greeting for a given name',
-            response_description='A JSON-encoded greeting for the provided name')
-async def get_greeting(name: Optional[str] = 'Stranger'):
-    return GreetingV2Output(message=f'Hello {name}')
+@router.get(
+    "/",
+    response_model=GreetingV2Output,
+    name="get_greeting_v2",
+    description="Get a greeting for a given name",
+    response_description="A JSON-encoded greeting for the provided name",
+)
+async def get_greeting(name: Optional[str] = "Stranger"):
+    return GreetingV2Output(message=f"Hello {name}")

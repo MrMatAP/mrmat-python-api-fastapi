@@ -20,7 +20,7 @@ CLUSTER_NAME := $(shell hostname -s)
 # Can be either 'istio-sidecar' or 'istio-ambient'
 MESH := istio-ambient
 # Can be 'ingress', 'gateway-api' or 'istio'
-EDGE := gateway-api
+EDGE := istio
 
 # How the container then connects to its datastore
 API_DB_URL="sqlite:////data/db.sqlite3"
