@@ -6,20 +6,27 @@ Boilerplate (and playground) for a code-first Python FastAPI API.
 
 ## How to build this
 
-Create a virtual environment, then:
+### Interactively
 
-```shell
-(venv) $ pip install -r requirements.txt
-(venv) $ python -m build -n --wheel
-```
+The project uses the [uv build tool](https://docs.astral.sh/uv/). Install it first, then simply run `uv build --wheel`.
 
-If you intend to run the testsuite or work on the code, then also install the requirements from `requirements.dev.txt`. You can run the testsuite using
+All interactive builds default their version to '0.0.0.dev0', which we use as a marker that this is a locally produced
+build which should not go into production. You can override this behaviour by setting the 'MRMAT_VERSION' environment
+variable to the desired version, but doing so is discouraged.
 
-```shell
-(venv) $ PYTHONPATH=src pytest tests
-```
+### Continuous Integration
 
-The resulting wheel is installable and knows its runtime dependencies. Any locally produced wheel will have version 0.0.0.dev0. This is intentional to distinguish local versions from those that are produced as releases in GitHub. You can override this behaviour by setting the `MRMAT_VERSION` environment variable to the desired version.
+GitHub Actions will trigger builds for pushes and pull requests. A merge push onto the main branch will additionally
+create a release.
+
+All builds on branches other than main will have their version calculated from the MAJOR, MINOR and GITHUB_RUN_NUMBER
+environment variables with a '.dev0' suffix appended. You can set the MAJOR and MINOR variables in
+`.github/workflows/build.yml`. Builds resulting from a merge push onto the main branch will not have a suffix.
+
+The resulting code is aware of its version at build-time via the extra `src/ci` module, which is explicitly excluded from
+the distribution. Pythons own `importlib.metadata` is then used to make the version available at runtime.
+
+### Container Image
 
 You can produce a container image and associated Helm chart using the provided Makefile:
 
