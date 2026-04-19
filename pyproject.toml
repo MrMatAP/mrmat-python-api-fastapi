@@ -51,6 +51,7 @@ dependencies = [
     "opentelemetry-instrumentation-starlette==0.59b0",
     "opentelemetry-instrumentation-tortoiseorm==0.59b0",
     "opentelemetry-instrumentation-urllib3==0.59b0",
+    "pyjwt>=2.12.1",
 ]
 [dependency-groups]
 dev = [
