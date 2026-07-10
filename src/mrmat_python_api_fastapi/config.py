@@ -32,6 +32,11 @@ class Config:
 
     secret_key: str = secrets.token_urlsafe(16)
     db_url: str = "sqlite:///"
+    idp_issuer: str = ""
+    oidc_auth_url: str = ""
+    oidc_token_url: str = ""
+    client_id: str = ""
+    client_secret: str = ""
 
     @staticmethod
     def from_context(file: str | None = os.getenv("APP_CONFIG")):
@@ -43,6 +48,11 @@ class Config:
                 "secret_key", secrets.token_urlsafe(16)
             )
             runtime_config.db_url = file_config.get("db_url", "sqlite:///")
+            runtime_config.idp_issuer = file_config.get("idp_issuer", "")
+            runtime_config.oidc_auth_url = file_config.get("oidc_auth_url", "")
+            runtime_config.oidc_token_url = file_config.get("oidc_token_url", "")
+            runtime_config.client_id = file_config.get("client_id", "")
+            runtime_config.client_secret = file_config.get("client_secret", "")
         if "APP_CONFIG_SECRET_KEY" in os.environ:
             runtime_config.secret_key = os.getenv(
                 "APP_CONFIG_SECRET_KEY", secrets.token_urlsafe(16)
@@ -50,3 +60,17 @@ class Config:
         if "APP_CONFIG_DB_URL" in os.environ:
             runtime_config.db_url = os.getenv("APP_CONFIG_DB_URL", "")
         return runtime_config
+
+    def save(self, file: str | None = None) -> None:
+        config_file = file or os.getenv("APP_CONFIG", "config.json")
+        data = {
+            "secret_key": self.secret_key,
+            "db_url": self.db_url,
+            "idp_issuer": self.idp_issuer,
+            "oidc_auth_url": self.oidc_auth_url,
+            "oidc_token_url": self.oidc_token_url,
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+        }
+        with open(config_file, "w", encoding="UTF-8") as f:
+            json.dump(data, f, indent=2)

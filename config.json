@@ -1,0 +1,9 @@
+{
+  "secret_key": "g-CGHkOhFTzHgsdJjyrHAw",
+  "db_url": "sqlite:///",
+  "idp_issuer": "https://idp.mrmat.org/realms/master",
+  "oidc_auth_url": "https://idp.mrmat.org/realms/master/protocol/openid-connect/auth",
+  "oidc_token_url": "https://idp.mrmat.org/realms/master/protocol/openid-connect/token",
+  "client_id": "0c7e01fb-207c-4d44-aed5-db3a568f0b6a",
+  "client_secret": "4r5l620Z3Wqo5r8K5WOOw1UrX0LUoFil"
+}
